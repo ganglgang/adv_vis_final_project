@@ -79,11 +79,11 @@ function init(){
         //test data
         if (predictionS == 'train'){
             await trainModel(model, inputs, labels,lr,bs,ep,lf,op,me,re);
-            testModel(model, data, tensorData);
+            testModel(model, data, tensorData,x,y,'Train Dataset');
         }else{
             const test_tensorData = convertToTensor(test_data);
             await trainModel(model, inputs, labels,lr,bs,ep,lf,op,me,re);
-            testModel(model, test_data, test_tensorData);
+            testModel(model, test_data, test_tensorData,x,y,'Test Dataset');
         }
 
 // Train the model
@@ -218,7 +218,7 @@ function init(){
         });
     }
 
-    function testModel(model, inputData, normalizationData) {
+    function testModel(model, inputData, normalizationData,datax,datay,tag) {
         const {inputMax, inputMin, labelMin, labelMax} = normalizationData;
 
         // Generate predictions for a uniform range of numbers between 0 and 1;
@@ -252,11 +252,11 @@ function init(){
 
 
         tfvis.render.scatterplot(
-            {name: 'Model Predictions vs Original Data'},
+            {name: 'Model Predictions vs '+tag},
             {values: [originalPoints, predictedPoints], series: ['original', 'predicted']},
             {
-                xLabel: 'Horsepower',
-                yLabel: 'MPG',
+                xLabel: datax,
+                yLabel: datay,
                 height: 300
             }
         );
